@@ -81,6 +81,42 @@ export function output(inp) {
     document.body.appendChild(document.createElement('pre')).innerHTML = inp;
 }
 
+export function addProps(obj, arr, val) {
+
+    if (typeof arr == 'string')
+        arr = arr.split(".");
+
+    obj[arr[0]] = obj[arr[0]] || {};
+
+    var tmpObj = obj[arr[0]];
+
+    if (arr.length > 1) {
+        arr.shift();
+        addProps(tmpObj, arr, val);
+    }
+    else
+        obj[arr[0]] = val;
+
+    return obj;
+
+}
+
+export function add_property(object, key, value) {
+    var keys = key.split('.');
+
+    while (keys.length > 1) {
+        var k = keys.shift();
+
+        if (!object.hasOwnProperty(k)) {
+            object[k] = {};
+        }
+
+        object = object[k];
+    }
+
+    object[keys[0]] = value;
+}
+
 /* Number.prototype.toFixedNumber = function (x, base) {
     var pow = Math.pow(base || 10, x);
     return Math.round(this * pow) / pow;
