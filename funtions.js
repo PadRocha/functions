@@ -30,7 +30,7 @@ export function addEvent(e, n, f) {return e.attachEvent?e.attachEvent('on'+n,f):
 export function getAjax(url, success) {
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
     xhr.open('GET', url);
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = e => {
         if (xhr.readyState>3 && xhr.status==200) success(xhr.responseText);
     };
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -47,9 +47,7 @@ export function postAjax(url, data, success) {
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
     xhr.open('POST', url);
     xhr.onreadystatechange = e => {
-        if (xhr.readyState > 3 && xhr.status == 200) {
-            success(xhr.responseText);
-        }
+        if (xhr.readyState>3 && xhr.status==200) success(xhr.responseText);
     };
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -82,3 +80,10 @@ export function clearElement(e) {
 export function output(inp) {
     document.body.appendChild(document.createElement('pre')).innerHTML = inp;
 }
+
+Number.prototype.toFixedNumber = function (x, base) {
+    var pow = Math.pow(base || 10, x);
+    return Math.round(this * pow) / pow;
+}
+
+module.exports = Number;
