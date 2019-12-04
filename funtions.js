@@ -73,4 +73,7 @@ function output(inp) {
     document.body.appendChild(document.createElement('pre')).innerHTML = inp;
 }
 
-//TODO : Hola
+//TODO : Hola expresion
+function Hola() {
+    
+}
