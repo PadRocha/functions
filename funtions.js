@@ -27,13 +27,23 @@ export function syntaxHighlight(json) {
 
 export function addEvent(e, n, f) {return e.attachEvent?e.attachEvent('on'+n,f):e.addEventListener(n, f, !!0)}
 
+export function getAjax(url, success) {
+    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+    xhr.open('GET', url);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState>3 && xhr.status==200) success(xhr.responseText);
+    };
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.send();
+    return xhr;
+}
+
 export function postAjax(url, data, success) {
     var params = typeof data == 'string' ? data : Object.keys(data).map(
         function (k) {
             return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
         }
     ).join('&');
-
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
     xhr.open('POST', url);
     xhr.onreadystatechange = e => {
