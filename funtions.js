@@ -1,12 +1,12 @@
-function randomProbability(min, max, matrizNumeros, matrizProbabilidad) {
+export function randomProbability(min, max, matrizNumeros, matrizProbabilidad) {
     for (let i = 0; i < matrizProbabilidad.length; i++)
         if (Math.random() < matrizProbabilidad[i]) return matrizNumeros[i];
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function random(minimo,maximo) { return Math.floor(Math.random() * (maximo - minimo + 1) + minimo); }
+export function random(minimo,maximo) { return Math.floor(Math.random() * (maximo - minimo + 1) + minimo); }
 
-function syntaxHighlight(json) {
+export function syntaxHighlight(json) {
     json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
         var cls = 'number';
@@ -25,9 +25,9 @@ function syntaxHighlight(json) {
     });
 }
 
-function addEvent(e, n, f) {return e.attachEvent?e.attachEvent('on'+n,f):e.addEventListener(n, f, !!0)}
+export function addEvent(e, n, f) {return e.attachEvent?e.attachEvent('on'+n,f):e.addEventListener(n, f, !!0)}
 
-function postAjax(url, data, success) {
+export function postAjax(url, data, success) {
     var params = typeof data == 'string' ? data : Object.keys(data).map(
         function (k) {
             return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
@@ -47,7 +47,7 @@ function postAjax(url, data, success) {
     return xhr;
 }
 
-function getUrlVars() {
+export function getUrlVars() {
     var vars = {};
     var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
         vars[key] = value;
@@ -55,7 +55,7 @@ function getUrlVars() {
     return vars;
 }
 
-function getUrlParam(parameter, defaultvalue) {
+export function getUrlParam(parameter, defaultvalue) {
     var urlparameter = defaultvalue;
     if (window.location.href.indexOf(parameter) > -1) {
         urlparameter = getUrlVars()[parameter];
@@ -63,12 +63,12 @@ function getUrlParam(parameter, defaultvalue) {
     return urlparameter;
 }
 
-function clearElement(e) {
+export function clearElement(e) {
     Array.from(e.childNodes).forEach(child => {
         e.removeChild(child);
     });
 }
 
-function output(inp) {
+export function output(inp) {
     document.body.appendChild(document.createElement('pre')).innerHTML = inp;
 }
