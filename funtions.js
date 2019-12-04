@@ -1,9 +1,9 @@
 function randomProbability(min, max, matrizNumeros, matrizProbabilidad) {
     for (let i = 0; i < matrizProbabilidad.length; i++)
-      if (Math.random() < matrizProbabilidad[i]) return matrizNumeros[i];
+        if (Math.random() < matrizProbabilidad[i]) return matrizNumeros[i];
     return Math.floor(Math.random() * (max - min + 1) + min);
-  }
-  
+}
+
 function random(minimo,maximo) { return Math.floor(Math.random() * (maximo - minimo + 1) + minimo); }
 
 function syntaxHighlight(json) {
@@ -72,3 +72,5 @@ function clearElement(e) {
 function output(inp) {
     document.body.appendChild(document.createElement('pre')).innerHTML = inp;
 }
+
+//TODO : Hola
