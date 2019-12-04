@@ -72,8 +72,3 @@ function clearElement(e) {
 function output(inp) {
     document.body.appendChild(document.createElement('pre')).innerHTML = inp;
 }
-
-//TODO : Hola expresion
-function Hola() {
-    
-}
