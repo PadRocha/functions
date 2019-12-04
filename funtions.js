@@ -81,9 +81,9 @@ export function output(inp) {
     document.body.appendChild(document.createElement('pre')).innerHTML = inp;
 }
 
-Number.prototype.toFixedNumber = function (x, base) {
+/* Number.prototype.toFixedNumber = function (x, base) {
     var pow = Math.pow(base || 10, x);
     return Math.round(this * pow) / pow;
 }
 
-module.exports = Number;
+module.exports = Number; */
