@@ -94,4 +94,22 @@ String.prototype.allReplace = function (obj) {
         retStr = retStr.replace(new RegExp(x, 'g'), obj[x]);
     }
     return retStr;
-};*/
+};
+
+
+// lib.js
+
+var YourThing = function () {
+}
+
+YourThing.prototype.someMethod = function () {
+  console.log('do something cool');
+}
+
+module.exports = YourThing;
+
+// index.js
+
+var YT = require('./lib.js');
+var yourThing = new YT();
+yourThing.someMethod(); */
