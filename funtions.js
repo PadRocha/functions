@@ -4,7 +4,9 @@ export function randomProbability(min, max, matrizNumeros, matrizProbabilidad) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-export function random(minimo,maximo) { return Math.floor(Math.random() * (maximo - minimo + 1) + minimo); }
+export function random(minimo, maximo) {
+    return Math.floor(Math.random() * (maximo - minimo + 1) + minimo);
+}
 
 export function syntaxHighlight(json) {
     json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -25,13 +27,15 @@ export function syntaxHighlight(json) {
     });
 }
 
-export function addEvent(e, n, f) {return e.attachEvent?e.attachEvent('on'+n,f):e.addEventListener(n, f, !!0)}
+export function addEvent(e, n, f) {
+    return e.attachEvent ? e.attachEvent('on' + n, f) : e.addEventListener(n, f, !!0)
+}
 
 export function getAjax(url, success) {
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
     xhr.open('GET', url);
     xhr.onreadystatechange = e => {
-        if (xhr.readyState>3 && xhr.status==200) success(xhr.responseText);
+        if (xhr.readyState > 3 && xhr.status == 200) success(xhr.responseText);
     };
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.send();
@@ -47,7 +51,7 @@ export function postAjax(url, data, success) {
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
     xhr.open('POST', url);
     xhr.onreadystatechange = e => {
-        if (xhr.readyState>3 && xhr.status==200) success(xhr.responseText);
+        if (xhr.readyState > 3 && xhr.status == 200) success(xhr.responseText);
     };
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -81,40 +85,21 @@ export function output(inp) {
     document.body.appendChild(document.createElement('pre')).innerHTML = inp;
 }
 
-export function addProps(obj, arr, val) {
+export function add_property(obj, key, val) {
+    if (typeof key == 'string')
+        key = key.split(".");
 
-    if (typeof arr == 'string')
-        arr = arr.split(".");
+    while (key.length > 1) {
+        var k = key.shift();
 
-    obj[arr[0]] = obj[arr[0]] || {};
-
-    var tmpObj = obj[arr[0]];
-
-    if (arr.length > 1) {
-        arr.shift();
-        addProps(tmpObj, arr, val);
-    }
-    else
-        obj[arr[0]] = val;
-
-    return obj;
-
-}
-
-export function add_property(object, key, value) {
-    var keys = key.split('.');
-
-    while (keys.length > 1) {
-        var k = keys.shift();
-
-        if (!object.hasOwnProperty(k)) {
-            object[k] = {};
+        if (!obj.hasOwnProperty(k)) {
+            obj[k] = {};
         }
 
-        object = object[k];
+        obj = obj[k];
     }
 
-    object[keys[0]] = value;
+    obj[key[0]] = val;
 }
 
 /* Number.prototype.toFixedNumber = function (x, base) {
