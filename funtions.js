@@ -99,23 +99,32 @@ function add_property(obj, key, val) {
     obj[key[0]] = val;
 }
 
-var g = {
+const g = {
     $: (e, set = document) => {
         return set.querySelector(e);
     },
-    $$: (e, set = document) => {
-        return set.querySelectorAll(e);
-    },
-    id: (e, set = document) => {
-        return set.querySelector('#' + e);
-    },
-    allId: (e, set = document) => {
-        return set.querySelectorAll('#' + e);
-    },
-    lastId: (e, set = document) => {
-        let node = set.querySelectorAll('#' + e);
+    $last: (e, set = document) => {
+        let node = set.querySelectorAll(e);
         return node[node.length - 1];
     },
+    $before: (e, set = document) => {
+        return set.querySelectorAll(e).previousSibling;
+    },
+    $after: (e, set = document) => {
+        return set.querySelectorAll(e).nextSibling;
+    },
+    $ch: (e, set = document) => {
+        return set.querySelector(e).childNodes;
+    },
+    $firstCh: (e, set = document) => {
+        return set.querySelector(e).firstChild;
+    },
+    $lastCh: (e, set = document) => {
+        return set.querySelector(e).lastChild;
+    },
+    $$: (e, set = document) => {
+        return set.querySelectorAll(e);
+    }
 }
 
 // document.getElementsByClassName();
@@ -126,6 +135,35 @@ var g = {
 // document.getSelection();
 // document.hasChildNodes();
 // document.hasFocus();
+
+String.prototype.capitalize = function (str) {
+    if (!str) {
+        str = this;
+    }
+    let sentences = str.split('.');
+    let updated = [];
+
+    sentences.map(function (sentence) {
+        if (sentence) {
+            if (sentence[0] !== ' ') {
+                let output = sentence.charAt(0).toUpperCase() + sentence.slice(1);
+                updated.push(output);
+            } else {
+                let output = sentence.charAt(1).toUpperCase() + sentence.slice(2);
+                updated.push(' ' + output);
+            }
+        }
+    });
+
+    let final = updated.join('.');
+
+    if (str.endsWith('.')) {
+        final += '.';
+    }
+
+    return final;
+}
+
 
 // Number.prototype.toFixedNumber = function (x, base) {
 //     var pow = Math.pow(base || 10, x);
