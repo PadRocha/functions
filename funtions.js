@@ -91,46 +91,75 @@ export function add_property(obj, key, val) {
 
     while (key.length > 1) {
         var k = key.shift();
-
         if (!obj.hasOwnProperty(k)) {
             obj[k] = {};
         }
-
         obj = obj[k];
     }
-
     obj[key[0]] = val;
 }
 
-/* Number.prototype.toFixedNumber = function (x, base) {
-    var pow = Math.pow(base || 10, x);
-    return Math.round(this * pow) / pow;
+var g = {
+    $: (e, set = document) => {
+        return set.querySelector(e);
+    },
+    $$: (e, set = document) => {
+        return set.querySelectorAll(e);
+    },
+    id: (e, set = document) => {
+        return set.querySelector('#' + e);
+    },
+    allId: (e, set = document) => {
+        return set.querySelectorAll('#' + e);
+    },
+    lastId: (e, set = document) => {
+        let node = set.querySelectorAll('#' + e);
+        return node[node.length - 1];
+    },
 }
 
-module.exports = Number; 
-
-String.prototype.allReplace = function (obj) {
-    var retStr = this;
-    for (var x in obj) {
-        retStr = retStr.replace(new RegExp(x, 'g'), obj[x]);
-    }
-    return retStr;
+export {
+    g
 };
 
+// document.getElementsByClassName();
+// document.getElementsByName();
+// document.getElementsByTagName();
+// document.getElementsByTagNameNS();
+// document.getRootNode();
+// document.getSelection();
+// document.hasChildNodes();
+// document.hasFocus();
 
-// lib.js
+// Number.prototype.toFixedNumber = function (x, base) {
+//     var pow = Math.pow(base || 10, x);
+//     return Math.round(this * pow) / pow;
+// }
 
-var YourThing = function () {
-}
+// module.exports = Number; 
 
-YourThing.prototype.someMethod = function () {
-  console.log('do something cool');
-}
+// String.prototype.allReplace = function (obj) {
+//     var retStr = this;
+//     for (var x in obj) {
+//         retStr = retStr.replace(new RegExp(x, 'g'), obj[x]);
+//     }
+//     return retStr;
+// };
 
-module.exports = YourThing;
 
-// index.js
+// // lib.js
 
-var YT = require('./lib.js');
-var yourThing = new YT();
-yourThing.someMethod(); */
+// var YourThing = function () {
+// }
+
+// YourThing.prototype.someMethod = function () {
+//   console.log('do something cool');
+// }
+
+// module.exports = YourThing;
+
+// // index.js
+
+// var YT = require('./lib.js');
+// var yourThing = new YT();
+// yourThing.someMethod();
