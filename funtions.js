@@ -1,3 +1,83 @@
+const j = {
+    $: (e, set = document) => {
+        return set.querySelector(e);
+    },
+    $$: (e, set = document) => {
+        return set.querySelectorAll(e);
+    },
+    $$$: (e, f, set = document) => {
+        var element = set.querySelector(e);
+        if (element) {
+            f(element);
+        }
+    },
+    $$$$: (e, f, set = document) => {
+        var element = set.querySelectorAll(e);
+        if (element) {
+            Array.from(element).map(e => {
+                f(e);
+            });
+        }
+    },
+    $name: (e, set = document) => {
+        return set.querySelector(e).nodeName;
+    },
+    $class: (e, set = document) => {
+        return set.querySelector(e).classList;
+    },
+    $parent: (e, set = document) => {
+        return set.querySelector(e).parentNode;
+    },
+    $last: (e, set = document) => {
+        let node = set.querySelectorAll(e);
+        return node[node.length - 1];
+    },
+    $before: (e, set = document) => {
+        return set.querySelector(e).previousSibling;
+    },
+    $after: (e, set = document) => {
+        return set.querySelector(e).nextSibling;
+    },
+    $ch: (e, set = document) => {
+        return set.querySelector(e).childNodes;
+    },
+    $firstCh: (e, set = document) => {
+        return set.querySelector(e).firstChild;
+    },
+    $lastCh: (e, set = document) => {
+        return set.querySelector(e).lastChild;
+    },
+    $css: (e, set = document) => {
+        return set.querySelector(e).style;
+    },
+    $$css: (e, f, result, set = document) => { // Aplica estilo al arreglo que se busca con f como nombre y result como resultado 
+        Array.from(set.querySelectorAll(e)).forEach(e => {
+            e.style[f] = result;
+        });
+    },
+    $clone: (e, set = document) => {
+        return set.querySelector(e).cloneNode(true);
+    },
+    $hide: (e, hide = true, set = document) => {
+        if (hide) {
+            set.querySelectorAll(e).forEach(e => {
+                e.style.display = 'none';
+            });
+        } else {
+            set.querySelectorAll(e).forEach(e => {
+                e.style.display = 'block';
+            });
+        }
+    },
+    hide: (e, hide = true) => {
+        if (hide) {
+            e.style.display = 'none';
+        } else {
+            e.style.display = 'block';
+        }
+    }
+}
+
 function randomProbability(min, max, matrizNumeros, matrizProbabilidad) {
     for (let i = 0; i < matrizProbabilidad.length; i++)
         if (Math.random() < matrizProbabilidad[i]) return matrizNumeros[i];
@@ -97,34 +177,6 @@ function add_property(obj, key, val) {
         obj = obj[k];
     }
     obj[key[0]] = val;
-}
-
-const g = {
-    $: (e, set = document) => {
-        return set.querySelector(e);
-    },
-    $last: (e, set = document) => {
-        let node = set.querySelectorAll(e);
-        return node[node.length - 1];
-    },
-    $before: (e, set = document) => {
-        return set.querySelectorAll(e).previousSibling;
-    },
-    $after: (e, set = document) => {
-        return set.querySelectorAll(e).nextSibling;
-    },
-    $ch: (e, set = document) => {
-        return set.querySelector(e).childNodes;
-    },
-    $firstCh: (e, set = document) => {
-        return set.querySelector(e).firstChild;
-    },
-    $lastCh: (e, set = document) => {
-        return set.querySelector(e).lastChild;
-    },
-    $$: (e, set = document) => {
-        return set.querySelectorAll(e);
-    }
 }
 
 // document.getElementsByClassName();
