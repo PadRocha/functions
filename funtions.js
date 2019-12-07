@@ -1,83 +1,3 @@
-const j = {
-    $: (e, set = document) => {
-        return set.querySelector(e);
-    },
-    $$: (e, set = document) => {
-        return set.querySelectorAll(e);
-    },
-    $$$: (e, f, set = document) => {
-        var element = set.querySelector(e);
-        if (element) {
-            f(element);
-        }
-    },
-    $$$$: (e, f, set = document) => {
-        var element = set.querySelectorAll(e);
-        if (element) {
-            Array.from(element).map(e => {
-                f(e);
-            });
-        }
-    },
-    $name: (e, set = document) => {
-        return set.querySelector(e).nodeName;
-    },
-    $class: (e, set = document) => {
-        return set.querySelector(e).classList;
-    },
-    $parent: (e, set = document) => {
-        return set.querySelector(e).parentNode;
-    },
-    $last: (e, set = document) => {
-        let node = set.querySelectorAll(e);
-        return node[node.length - 1];
-    },
-    $before: (e, set = document) => {
-        return set.querySelector(e).previousSibling;
-    },
-    $after: (e, set = document) => {
-        return set.querySelector(e).nextSibling;
-    },
-    $ch: (e, set = document) => {
-        return set.querySelector(e).childNodes;
-    },
-    $firstCh: (e, set = document) => {
-        return set.querySelector(e).firstChild;
-    },
-    $lastCh: (e, set = document) => {
-        return set.querySelector(e).lastChild;
-    },
-    $css: (e, set = document) => {
-        return set.querySelector(e).style;
-    },
-    $$css: (e, f, result, set = document) => { // Aplica estilo al arreglo que se busca con f como nombre y result como resultado 
-        Array.from(set.querySelectorAll(e)).forEach(e => {
-            e.style[f] = result;
-        });
-    },
-    $clone: (e, set = document) => {
-        return set.querySelector(e).cloneNode(true);
-    },
-    $hide: (e, hide = true, set = document) => {
-        if (hide) {
-            set.querySelectorAll(e).forEach(e => {
-                e.style.display = 'none';
-            });
-        } else {
-            set.querySelectorAll(e).forEach(e => {
-                e.style.display = 'block';
-            });
-        }
-    },
-    hide: (e, hide = true) => {
-        if (hide) {
-            e.style.display = 'none';
-        } else {
-            e.style.display = 'block';
-        }
-    }
-}
-
 function randomProbability(min, max, matrizNumeros, matrizProbabilidad) {
     for (let i = 0; i < matrizProbabilidad.length; i++)
         if (Math.random() < matrizProbabilidad[i]) return matrizNumeros[i];
@@ -107,9 +27,9 @@ function syntaxHighlight(json) {
     });
 }
 
-function addEvent(e, n, f) {
-    return e.attachEvent ? e.attachEvent('on' + n, f) : e.addEventListener(n, f, !!0)
-}
+// function addEvent(e, n, f) {
+//     return e.attachEvent ? e.attachEvent('on' + n, f) : e.addEventListener(n, f, !!0)
+// }
 
 function getAjax(url, success) {
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
@@ -156,13 +76,33 @@ function getUrlParam(parameter, defaultvalue) {
 }
 
 function clearElement(e) {
-    Array.from(e.childNodes).forEach(child => {
+    Array.from(e.childNodes).map(child => {
         e.removeChild(child);
     });
 }
 
 function output(inp) {
     document.body.appendChild(document.createElement('pre')).innerHTML = inp;
+}
+
+function mostrarPropiedades(objeto, nombreObjeto) {
+    var resultado = ``;
+    for (var i in objeto) {
+        //objeto.hasOwnProperty se usa para filtrar las propiedades del objeto
+        if (objeto.hasOwnProperty(i)) {
+            resultado += `${nombreObjeto}.${i} = ${objeto[i]}\n`;
+        }
+    }
+    return resultado;
+}
+
+function listaTodasLasPropiedades(o) {
+    var objetoAInspeccionar;
+    var resultado = [];
+    for (objetoAInspeccionar = o; objetoAInspeccionar !== null; objetoAInspeccionar = Object.getPrototypeOf(objetoAInspeccionar)) {
+        resultado = resultado.concat(Object.getOwnPropertyNames(objetoAInspeccionar)) + "\n";
+    }
+    return resultado;
 }
 
 function add_property(obj, key, val) {
@@ -216,6 +156,164 @@ String.prototype.capitalize = function (str) {
     return final;
 }
 
+const j = {
+    // Selecciona un Elemento (Solo el primero)
+    $: (e, set = document) => {
+        return set.querySelector(e);
+    },
+    // Selecciona un arreglo de Elementos
+    $$: (e, set = document) => {
+        return set.querySelectorAll(e);
+    },
+    // Selecciona un Elemento (Solo el primero) y realiza un Callback con f donde se puede hacer una función dentro
+    $$$: (e, f, set = document) => {
+        let element = set.querySelector(e);
+        if (element) {
+            f(element);
+        }
+    },
+    // Selecciona un arreglo de Elementos y realiza un Callback con f donde se puede hacer una función dentro
+    $$$$: (e, f, set = document) => {
+        let elements = set.querySelectorAll(e);
+        if (elements) {
+            elements.forEach((e, index, array) => {
+                f(e, index, array);
+            });
+        }
+    },
+    //Hace lo mismo que j.$$$ pero dentro de un intervalo donde time es el Intervalo y stop determinará el tiempo de ejecición
+    $$$Interval: (e, f, time, stop = null, set = document) => {
+        let element = set.querySelector(e);
+        if (element) {
+            this.interval = setInterval(() => {
+                f(element);
+            }, time);
+            if (stop !== null) {
+                setTimeout(() => {
+                    clearInterval(this.interval);
+                }, stop);
+            }
+        }
+    },
+    //Hace lo mismo que j.$$$$ pero dentro de un intervalo donde time es el Intervalo y stop determinará el tiempo de ejecición
+    $$$$Interval: (e, f, time, stop = null, set = document) => {
+        let elements = set.querySelectorAll(e);
+        if (elements) {
+            this.interval = setInterval(() => {
+                elements.forEach((e, index, array) => {
+                    f(e, index, array);
+                });
+            }, time);
+            if (stop !== null) {
+                setTimeout(() => {
+                    clearInterval(this.interval);
+                }, stop);
+            }
+        }
+    },
+    $name: (e, set = document) => {
+        return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).nodeName;
+    },
+    $class: (e, set = document) => {
+        return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).classList;
+    },
+    $parent: (e, set = document) => {
+        return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).parentNode;
+    },
+    $last: (e, set = document) => {
+        let node = set.querySelectorAll(e);
+        return node[node.length - 1];
+    },
+    $before: (e, set = document) => {
+        return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).previousSibling;
+    },
+    $after: (e, set = document) => {
+        return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).nextSibling;
+    },
+    $ch: (e, set = document) => {
+        return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).childNodes;
+    },
+    $firstCh: (e, set = document) => {
+        return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).firstChild;
+    },
+    $lastCh: (e, set = document) => {
+        return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).lastChild;
+    },
+    $css: (e, styles, property = null, set = document) => {
+        let element = (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e);
+        if (property === null && element) {
+            return element.style[styles];
+        } else if (element) {
+            element.style[styles] = property;
+        }
+    },
+    $$css: (e, styles, set = document) => { // Aplica estilo al arreglo que se busca con f como nombre y result como resultado 
+        let elements = (typeof e === 'string' || e instanceof String ? set.querySelectorAll(e) : e);
+
+        if (typeof styles == 'object' || styles instanceof Object && elements) {
+            elements.forEach(e => {
+                for (let property in styles)
+                    e.style[property] = styles[property];
+            });
+        }
+        /*  else if (styles.isArray() && elements) {
+                    elements.forEach(e => {
+                        while (styles.length > 1) {
+                            var k = styles.shift();
+                            if (!obj.hasOwnProperty(k)) {
+                                obj[k] = {};
+                            }
+                            obj = obj[k];
+                        }
+                        obj[styles[0]] = val;
+                    });
+                    return styles.map(e => {
+                        return elements.style[e];
+                    });
+                } */
+        // Array.from(typeof e === 'string' || e instanceof String ? set.querySelectorAll(e) : e).map((e, i) => {
+        //     e.style[f] = result;
+        // });
+    },
+    $clone: (e, set = document) => {
+        return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).cloneNode(true);
+    },
+    $addEvent: (e, n, f, set = document) => {
+        let element = (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e);
+        if (element) {
+            return element.attachEvent ? element.attachEvent('on' + n, f) : element.addEventListener(n, f, !!0);
+        }
+    },
+    $$addEvent: (e, n, f, set = document) => {
+        let elements = (typeof e === 'string' || e instanceof String ? set.querySelectorAll(e) : e);
+        if (elements) {
+            elements.forEach((e, index, array) => {
+                return e.attachEvent ? e.attachEvent('on' + n, f) : e.addEventListener(n, f, !!0);
+            });
+        }
+    },
+    $hide: (e, hide = true, set = document) => {
+        let element = (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e);
+        if (hide) {
+            element.style.display = 'none';
+        } else {
+            element.style.display = 'block';
+        }
+    },
+    $$hide: (e, hide = true, set = document) => {
+        let elements = (typeof e === 'string' || e instanceof String ? set.querySelectorAll(e) : e);
+        if (hide && elements) {
+            elements.forEach(() => {
+                e.style.display = 'none';
+            });
+        } else if (elements) {
+            elements.forEach(() => {
+                e.style.display = 'block';
+            });
+        }
+    }
+}
+
 
 // Number.prototype.toFixedNumber = function (x, base) {
 //     var pow = Math.pow(base || 10, x);
@@ -249,3 +347,17 @@ String.prototype.capitalize = function (str) {
 // var YT = require('./lib.js');
 // var yourThing = new YT();
 // yourThing.someMethod();
+
+
+// // example request
+// postAjax('http://foo.bar/', 'p1=1&p2=Hello+World', function (data) {
+//     console.log(data);
+// });
+
+// // example request with data object
+// postAjax('http://foo.bar/', {
+//     p1: 1,
+//     p2: 'Hello World'
+// }, function (data) {
+//     console.log(data);
+// });
