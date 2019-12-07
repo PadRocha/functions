@@ -119,22 +119,12 @@ function add_property(obj, key, val) {
     obj[key[0]] = val;
 }
 
-// document.getElementsByClassName();
-// document.getElementsByName();
-// document.getElementsByTagName();
-// document.getElementsByTagNameNS();
-// document.getRootNode();
-// document.getSelection();
-// document.hasChildNodes();
-// document.hasFocus();
-
 String.prototype.capitalize = function (str) {
     if (!str) {
         str = this;
     }
     let sentences = str.split('.');
     let updated = [];
-
     sentences.map(function (sentence) {
         if (sentence) {
             if (sentence[0] !== ' ') {
@@ -146,15 +136,34 @@ String.prototype.capitalize = function (str) {
             }
         }
     });
-
     let final = updated.join('.');
-
     if (str.endsWith('.')) {
         final += '.';
     }
-
     return final;
 }
+
+Number.prototype.toFixedNumber = function (x, base) {
+    var pow = Math.pow(base || 10, x);
+    return Math.round(this * pow) / pow;
+}
+
+String.prototype.allReplace = function (obj) {
+    var retStr = this;
+    for (var x in obj) {
+        retStr = retStr.replace(new RegExp(x, 'g'), obj[x]);
+    }
+    return retStr;
+};
+
+// document.getElementsByClassName();
+// document.getElementsByName();
+// document.getElementsByTagName();
+// document.getElementsByTagNameNS();
+// document.getRootNode();
+// document.getSelection();
+// document.hasChildNodes();
+// document.hasFocus();
 
 const j = {
     // Selecciona un Elemento (Solo el primero)
@@ -249,31 +258,12 @@ const j = {
     },
     $$css: (e, styles, set = document) => { // Aplica estilo al arreglo que se busca con f como nombre y result como resultado 
         let elements = (typeof e === 'string' || e instanceof String ? set.querySelectorAll(e) : e);
-
         if (typeof styles == 'object' || styles instanceof Object && elements) {
             elements.forEach(e => {
                 for (let property in styles)
                     e.style[property] = styles[property];
             });
         }
-        /*  else if (styles.isArray() && elements) {
-                    elements.forEach(e => {
-                        while (styles.length > 1) {
-                            var k = styles.shift();
-                            if (!obj.hasOwnProperty(k)) {
-                                obj[k] = {};
-                            }
-                            obj = obj[k];
-                        }
-                        obj[styles[0]] = val;
-                    });
-                    return styles.map(e => {
-                        return elements.style[e];
-                    });
-                } */
-        // Array.from(typeof e === 'string' || e instanceof String ? set.querySelectorAll(e) : e).map((e, i) => {
-        //     e.style[f] = result;
-        // });
     },
     $clone: (e, set = document) => {
         return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).cloneNode(true);
@@ -287,7 +277,7 @@ const j = {
     $$addEvent: (e, n, f, set = document) => {
         let elements = (typeof e === 'string' || e instanceof String ? set.querySelectorAll(e) : e);
         if (elements) {
-            elements.forEach((e, index, array) => {
+            elements.forEach(e => {
                 return e.attachEvent ? e.attachEvent('on' + n, f) : e.addEventListener(n, f, !!0);
             });
         }
@@ -313,41 +303,6 @@ const j = {
         }
     }
 }
-
-
-// Number.prototype.toFixedNumber = function (x, base) {
-//     var pow = Math.pow(base || 10, x);
-//     return Math.round(this * pow) / pow;
-// }
-
-// module.exports = Number; 
-
-// String.prototype.allReplace = function (obj) {
-//     var retStr = this;
-//     for (var x in obj) {
-//         retStr = retStr.replace(new RegExp(x, 'g'), obj[x]);
-//     }
-//     return retStr;
-// };
-
-
-// // lib.js
-
-// var YourThing = function () {
-// }
-
-// YourThing.prototype.someMethod = function () {
-//   console.log('do something cool');
-// }
-
-// module.exports = YourThing;
-
-// // index.js
-
-// var YT = require('./lib.js');
-// var yourThing = new YT();
-// yourThing.someMethod();
-
 
 // // example request
 // postAjax('http://foo.bar/', 'p1=1&p2=Hello+World', function (data) {
