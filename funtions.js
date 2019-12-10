@@ -314,34 +314,43 @@ const j = {
             }
         }
     },
+    // Regresa el Nombre de la tag señalada
     $name: (e, set = document) => {
-        return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).nodeName;
+        return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).tagName;
     },
+    // Regresa las clases de un Nodo (Arreglo)
     $class: (e, set = document) => {
         return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).classList;
     },
+    // Regresa el Nodo padre señalado
     $parent: (e, set = document) => {
         return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).parentNode;
     },
+    // Regresa el último Nodo buscado
     $last: (e, set = document) => {
         let node = set.querySelectorAll(e);
         return node[node.length - 1];
     },
+    // Regresa un Nodo antes al actual mientras sea un Hijo
     $before: (e, set = document) => {
         return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).previousSibling;
     },
+    // Regresa un Nodo después al actual mientras sea un Hijo
     $after: (e, set = document) => {
         return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).nextSibling;
     },
+    // Regresa un ChildList (Arreglo)
     $ch: (e, set = document) => {
         return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).childNodes;
     },
+    // Regresa el Primer hijo del Nodo seleccionado
     $firstCh: (e, set = document) => {
         return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).firstChild;
     },
     $lastCh: (e, set = document) => {
         return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).lastChild;
     },
+    // Regresa el estilo seleccionado en 'Styles', cuando 'Property' sea diferente a nulo, establece el estilo
     $css: (e, styles, property = null, set = document) => {
         let element = (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e);
         if (property === null && element) {
@@ -350,7 +359,8 @@ const j = {
             element.style[styles] = property;
         }
     },
-    $$css: (e, styles, set = document) => { // Aplica estilo al arreglo que se busca con f como nombre y result como resultado 
+    // Establece un estilo a una seleccion de nodos, styles es un Objeto {estilo: 'estilo'}
+    $$css: (e, styles, set = document) => {
         let elements = (typeof e === 'string' || e instanceof String ? set.querySelectorAll(e) : e);
         if (typeof styles == 'object' || styles instanceof Object && elements) {
             elements.forEach(e => {
@@ -359,14 +369,16 @@ const j = {
             });
         }
     },
+    // Clona un Nodo
     $clone: (e, set = document) => {
         return (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).cloneNode(true);
     },
+    // Crea un Elemento, se le pueden dar un Atributo, insertar dentro del elemento, otorgarlo a un Nodo
     $create: (e, attribute = null, insert = null, append = null, set = document, ns = null) => {
         if (ns === null) {
-            var element = document.createElement(e);
+            this.element = document.createElement(e);
         } else {
-            var element = document.createElementNS(ns, e);
+            this.element = document.createElementNS(ns, e);
         }
         if (typeof attribute == 'object' || attribute instanceof Object && element) {
             for (let property in attribute)
@@ -393,20 +405,23 @@ const j = {
             return element;
         }
     },
+    // Crea un Evento a un Nodo o con un Selector
     $addEvent: (e, n, f, set = document) => {
         let element = (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e);
         if (element) {
-            return element.attachEvent ? element.attachEvent('on' + n, f) : element.addEventListener(n, f, !!0);
+            element.attachEvent ? element.attachEvent('on' + n, f) : element.addEventListener(n, f, !!0);
         }
     },
+    // Lo mismo que la anterior pero con un Arreglo
     $$addEvent: (e, n, f, set = document) => {
         let elements = (typeof e === 'string' || e instanceof String ? set.querySelectorAll(e) : e);
         if (elements) {
-            elements.forEach(e => {
-                return e.attachEvent ? e.attachEvent('on' + n, f) : e.addEventListener(n, f, !!0);
+            [].forEach.call(elements, e => {
+                e.attachEvent ? e.attachEvent('on' + n, f) : e.addEventListener(n, f, !!0);
             });
         }
     },
+    // Oculta un Nodo, con hide = false, cancela 
     $hide: (e, hide = true, set = document) => {
         let element = (typeof e === 'string' || e instanceof String ? set.querySelector(e) : e);
         if (hide) {
@@ -415,6 +430,7 @@ const j = {
             element.style.display = 'block';
         }
     },
+    // Lo mismo que la anterior pero con un Arreglo
     $$hide: (e, hide = true, set = document) => {
         let elements = (typeof e === 'string' || e instanceof String ? set.querySelectorAll(e) : e);
         if (hide && elements) {
@@ -426,6 +442,26 @@ const j = {
                 e.style.display = 'block';
             });
         }
+    },
+    // Ready
+    $ready: (callback) => {
+        if (document.readyState != "loading") callback();
+        else document.addEventListener("DOMContentLoaded", callback);
+    },
+    $formJson: (e, set = document) => {
+        var object = {};
+        new FormData(typeof e === 'string' || e instanceof String ? set.querySelector(e) : e).forEach((value, key) => {
+            // Reflect.has in favor of: object.hasOwnProperty(key)
+            if (!Reflect.has(object, key)) {
+                object[key] = value;
+                return;
+            }
+            if (!Array.isArray(object[key])) {
+                object[key] = [object[key]];
+            }
+            object[key].push(value);
+        });
+        return object;
     }
 }
 
